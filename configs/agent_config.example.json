@@ -24,6 +24,7 @@
     "docs/model_usage.md",
     "docs/frontend_implementation.md",
     "docs/user_guide.md",
+    "docs/open_and_use.md",
     "examples/conversation_example.md"
   ],
   "conversation_starters": [

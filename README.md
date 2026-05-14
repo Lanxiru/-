@@ -22,6 +22,7 @@
 7. 如果不确定是否需要接入模型，先看 `docs/model_usage.md`。
 8. 如果要做成可操作网页，先运行 `web/index.html` 静态原型，并参考 `docs/frontend_implementation.md`。
 9. 如果想确认产品完成度和使用步骤，阅读 `docs/user_guide.md`。
+10. 如果只想知道“怎么打开智能体使用”，阅读 `docs/open_and_use.md`。
 
 ## 文件结构
 
@@ -33,6 +34,7 @@ docs/agent_blueprint.md               # 可落地为自定义智能体的产品�
 docs/model_usage.md                   # 模型调用需求与部署方式说明
 docs/frontend_implementation.md        # 前端网页界面实施方案
 docs/user_guide.md                    # 产品完成度与使用指南
+docs/open_and_use.md                  # 打开网页与启动智能体的使用步骤
 web/                                  # 可操作静态网页原型与运行说明
 scripts/start_web.sh                  # 一键启动网页原型
 examples/conversation_example.md       # 从任务书到图像提示词的示例对话
@@ -61,6 +63,13 @@ templates/image_prompt_template.md    # 方案转图像提示词模板
 ## 当前完成度
 
 本仓库已经完成 MVP 级产品设计和可操作静态网页原型：你可以用提示词包直接辅助课程设计，也可以运行 `web/` 原型整理任务书、现状图和模型请求。它还不是完整上线版产品；真实 AI 调用、用户登录、数据库、图片生成历史和 CAD/GIS 能力需要后续接入后端实现。详细使用路径见 `docs/user_guide.md`。
+
+
+## 怎么打开智能体使用
+
+- 想打开网页原型：在仓库根目录运行 `./scripts/start_web.sh`，再打开 `http://127.0.0.1:8000`；远程环境请打开平台提供的端口转发链接。
+- 想真正和智能体对话：把 `prompts/system_prompt.md` 复制到 ChatGPT 自定义 GPT、Coze、Dify 或后端模型的 system prompt 中，再按 `templates/project_brief_template.md` 输入你的任务书。
+- 更详细的逐步说明见 `docs/open_and_use.md`。
 
 ## 前端网页原型
 
