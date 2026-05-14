@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>城乡规划方案智能体 Web 原型</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div>
+        <p class="eyebrow">Urban Planning Studio Copilot</p>
+        <h1>城乡规划方案智能体</h1>
+        <p class="subtitle">上传任务书与现状图，逐步生成基地诊断、概念方案、规范风险提示和出图提示词。</p>
+      </div>
+      <div class="status-card" aria-label="当前模式">
+        <span class="status-dot"></span>
+        <span>前端演示模式</span>
+      </div>
+    </header>
+
+    <main class="app-shell">
+      <aside class="sidebar" aria-label="项目资料输入区">
+        <section class="panel">
+          <div class="panel-heading">
+            <h2>1. 项目任务书</h2>
+            <button id="loadSample" class="ghost-button" type="button">填入示例</button>
+          </div>
+          <label>
+            项目名称
+            <input id="projectName" type="text" placeholder="例如：滨水老厂区更新设计" />
+          </label>
+          <label>
+            城市与基地背景
+            <input id="siteContext" type="text" placeholder="例如：某城市中心区滨水老厂区，约 12 公顷" />
+          </label>
+          <label>
+            任务书 / 指标 / 老师要求
+            <textarea id="brief" rows="8" placeholder="粘贴任务书文字，或概述功能、指标、成果要求……"></textarea>
+          </label>
+        </section>
+
+        <section class="panel">
+          <h2>2. 现状图与约束</h2>
+          <label class="file-drop">
+            <input id="siteImage" type="file" accept="image/*" />
+            <span>上传现状图 / 航拍 / 草图</span>
+            <small>本原型只做本地预览；正式接入时可发送给多模态视觉模型。</small>
+          </label>
+          <img id="preview" class="preview" alt="现状图预览" hidden />
+          <label>
+            需要保留或重点关注的要素
+            <textarea id="constraints" rows="5" placeholder="例如：保留两栋厂房；南侧水岸不可改变；北侧道路为主要入口……"></textarea>
+          </label>
+        </section>
+
+        <section class="panel">
+          <h2>3. 输出设置</h2>
+          <div class="grid-two">
+            <label>
+              当前阶段
+              <select id="stage">
+                <option value="任务解析">任务解析</option>
+                <option value="现状诊断">现状诊断</option>
+                <option value="概念方案">概念方案</option>
+                <option value="方案深化">方案深化</option>
+                <option value="规范自检">规范自检</option>
+                <option value="图像提示词">图像提示词</option>
+              </select>
+            </label>
+            <label>
+              图像类型
+              <select id="imageType">
+                <option value="总平面示意图">总平面示意图</option>
+                <option value="鸟瞰效果图">鸟瞰效果图</option>
+                <option value="轴测分析图">轴测分析图</option>
+                <option value="节点人视图">节点人视图</option>
+                <option value="剖面透视图">剖面透视图</option>
+              </select>
+            </label>
+          </div>
+          <label>
+            设计偏好
+            <input id="style" type="text" placeholder="例如：教学汇报风格、蓝绿生态、工业记忆、清晰图例" />
+          </label>
+          <button id="generate" class="primary-button" type="button">生成智能体请求</button>
+        </section>
+      </aside>
+
+      <section class="workspace" aria-label="智能体工作区">
+        <div class="tabs" role="tablist" aria-label="输出类型">
+          <button class="tab active" data-tab="prompt" type="button">模型请求</button>
+          <button class="tab" data-tab="previewText" type="button">前端预览</button>
+          <button class="tab" data-tab="integration" type="button">接入说明</button>
+        </div>
+
+        <article id="prompt" class="tab-panel active">
+          <div class="panel-heading">
+            <h2>发送给后端 / 大语言模型的请求</h2>
+            <button id="copyPrompt" class="ghost-button" type="button">复制</button>
+          </div>
+          <pre id="promptOutput" class="output-box">点击“生成智能体请求”后，这里会整理出可发送给模型的结构化请求。</pre>
+        </article>
+
+        <article id="previewText" class="tab-panel">
+          <h2>前端本地预览</h2>
+          <div id="localPreview" class="cards-grid">
+            <p class="empty">这里展示前端根据表单整理出的项目摘要。真正方案生成应由后端调用 AI 模型完成。</p>
+          </div>
+        </article>
+
+        <article id="integration" class="tab-panel">
+          <h2>如何接入真实模型</h2>
+          <ol class="integration-list">
+            <li>前端收集任务书、约束、图片和输出阶段。</li>
+            <li>前端把文字和图片上传给自己的后端，不要在浏览器里暴露 API Key。</li>
+            <li>后端读取 <code>prompts/system_prompt.md</code>，组装 system prompt 与 user prompt。</li>
+            <li>如用户上传图片，后端调用多模态视觉模型先提取现状要素。</li>
+            <li>文本模型生成方案、表格、风险提示和图像提示词。</li>
+            <li>如需要直接出图，再把最终提示词发送给图像生成模型。</li>
+          </ol>
+        </article>
+      </section>
+    </main>
+
+    <template id="summaryCardTemplate">
+      <section class="summary-card">
+        <h3></h3>
+        <p></p>
+      </section>
+    </template>
+
+    <script src="./app.js" type="module"></script>
+  </body>
+</html>

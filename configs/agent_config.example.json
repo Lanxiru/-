@@ -1,0 +1,41 @@
+{
+  "name": "城乡规划方案共创助手",
+  "description": "根据基地任务书和现状图，帮助城乡规划学生生成方案、迭代总平面，并输出图像生成提示词。",
+  "language": "zh-CN",
+  "model_requirements": {
+    "minimum": "text_llm",
+    "recommended_for_site_images": "multimodal_vision_model",
+    "optional_for_direct_rendering": "image_generation_model"
+  },
+  "recommended_model_behavior": {
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "style": "教学型、结构化、可视化表达导向",
+    "ask_before_design_when_missing_core_data": true
+  },
+  "knowledge_files": [
+    "prompts/system_prompt.md",
+    "docs/workflow.md",
+    "docs/output_spec.md",
+    "templates/project_brief_template.md",
+    "templates/site_image_review_template.md",
+    "templates/image_prompt_template.md",
+    "docs/agent_blueprint.md",
+    "docs/model_usage.md",
+    "docs/frontend_implementation.md",
+    "docs/user_guide.md",
+    "examples/conversation_example.md"
+  ],
+  "conversation_starters": [
+    "我有一份基地任务书，帮我拆解设计条件。",
+    "我上传一张现状图，请帮我做基地诊断和机会点分析。",
+    "请给我 3 个城乡规划概念方案，并比较优缺点。",
+    "把这个总平面方案转成鸟瞰图和轴测分析图提示词。"
+  ],
+  "guardrails": [
+    "不编造规范条文号或地方审批结论。",
+    "真实项目必须提醒核查最新法定规划、地方标准和主管部门要求。",
+    "不擅自改变用户明确要求保留的基地边界、水体、道路红线、历史建筑和生态保护要素。",
+    "图像提示词必须包含负面提示词和现状约束提醒。"
+  ]
+}
